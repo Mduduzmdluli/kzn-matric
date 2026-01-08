@@ -2,6 +2,8 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import AdminSidebar from '@/components/admin/AdminSidebar';
+import AdminTopBar from '@/components/admin/AdminTopBar';
+import AdminFooter from '@/components/admin/AdminFooter';
 
 export default function AdminLayout({
                                         children,
@@ -13,11 +15,10 @@ export default function AdminLayout({
 
     useEffect(() => {
         // Check if admin is authenticated
-        // Replace this with your actual auth check
         const checkAuth = () => {
-            const token = localStorage.getItem('adminToken');
+            const token = localStorage.getItem('admin-token');
             if (!token) {
-                router.push('/auth/admin/login');
+                router.push('/auth/admin/signin');
             } else {
                 setIsAuthenticated(true);
             }
@@ -28,18 +29,22 @@ export default function AdminLayout({
 
     if (!isAuthenticated) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
             </div>
         );
     }
 
     return (
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen bg-gray-50 dark:bg-dark">
             <AdminSidebar />
-            <main className="flex-1 bg-gray-50 p-8">
-                {children}
-            </main>
+            <div className="flex-1 flex flex-col">
+                <AdminTopBar />
+                <main className="flex-1 p-8">
+                    {children}
+                </main>
+                <AdminFooter />
+            </div>
         </div>
     );
 }

@@ -49,8 +49,9 @@ export default function Signup() {
     zipCodeP: '',
     countryP: '',
 
-    // Step 4: Document (For simplicity, we handle the File separately)
-    document: null as File | null
+    // Step 4: Documents
+    idDocument: null as File | null,
+    matricDocument: null as File | null
   });
 
   const [validationErrors, setValidationErrors] = useState({
@@ -364,9 +365,24 @@ export default function Signup() {
     setValidationErrors(prev => ({ ...prev, interested_courses: '' }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: 'idDocument' | 'matricDocument') => {
     const file = e.target.files ? e.target.files[0] : null;
-    setFormData(prev => ({ ...prev, document: file }));
+
+    // Validate file size (max 5MB)
+    if (file && file.size > 5 * 1024 * 1024) {
+      setError(`${fieldName === 'idDocument' ? 'ID' : 'Matric'} document must be less than 5MB`);
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+    if (file && !allowedTypes.includes(file.type)) {
+      setError(`${fieldName === 'idDocument' ? 'ID' : 'Matric'} document must be PDF, JPG, or PNG`);
+      return;
+    }
+
+    setFormData(prev => ({ ...prev, [fieldName]: file }));
+    setError('');
   };
 
   const nextStep = () => {
@@ -416,68 +432,106 @@ export default function Signup() {
       setError('Please fix all validation errors before submitting.');
       return;
     }
+
+    // Validate documents
+    if (!formData.idDocument) {
+      setError('Please upload your ID copy.');
+      return;
+    }
+
+    if (!formData.matricDocument) {
+      setError('Please upload your matric results/certificate.');
+      return;
+    }
+
     setLoading(true);
 
-    // --- Data Mapping to Backend Schema ---
-    const payload = {
-      // Step 1: Personal Info & Credentials
-      first_name: formData.firstName,
-      last_name: formData.lastName,
-      username: formData.email,
-      gender: formData.gender,
-      identity_reference: formData.identity_reference,
-      identity_type_id: 1, // Assuming 1 is SA ID for student
-      nationality: formData.nationality,
-      interested_courses: formData.interested_courses,
-      role_id: 4,
-      user_type: 2,
-      // NOTE: Using a static password for demonstration/test environment safety
-      password: "kznMatric2026",
-      contact: {
-        phone: formData.phone,
-        tel_no: formData.tel_no,
-        email: formData.email,
-      },
-      address: {
-        address_line_1: formData.street,
-        city: formData.city,
-        province: formData.state,
-        postal_code: formData.zipCode,
-        country: formData.country,
-        address_type_id: 1
-      },
-
-      // 2. School
-      school: {
-        name: formData.schoolName,
-        centre_no: formData.schoolCentreNo,
-        school_phone: formData.schoolPhone,
-        subjects: [], // Assuming subjects is handled later or empty for now
-        school_city: formData.schoolCity
-      },
-
-      // 3 Parents/Guardian
-      parent: {
-        first_nameP: formData.firstNameP,
-        last_nameP: formData.lastNameP,
-        genderP: formData.genderP,
-        identity_referenceP: formData.identity_referenceP,
-        identity_type_idP: 1, // Assuming 1 is SA ID for parent
-        nationalityP: formData.nationalityP,
-        phoneP: formData.phoneP,
-        relationshipP: formData.relationship,
-        occupationP: formData.occupation,
-        address_lineP: formData.streetP,
-        cityP: formData.cityP,
-        provinceP: formData.stateP,
-        postal_codeP: formData.zipCodeP,
-        countryP: formData.countryP,
-        address_type_idP: 1
-      }
-    };
-    // ----------------------------------------
-
     try {
+      // Step 1: Upload documents first
+      const uploadFormData = new FormData();
+      uploadFormData.append('idDocument', formData.idDocument);
+      uploadFormData.append('matricDocument', formData.matricDocument);
+      uploadFormData.append('studentName', `${formData.firstName}_${formData.lastName}`);
+      uploadFormData.append('idNumber', formData.identity_reference);
+
+      const uploadResponse = await fetch('/api/upload/documents', {
+        method: 'POST',
+        body: uploadFormData,
+      });
+
+      if (!uploadResponse.ok) {
+        const uploadError = await uploadResponse.json();
+        setError(uploadError.error || 'Failed to upload documents.');
+        setLoading(false);
+        return;
+      }
+
+      const uploadResult = await uploadResponse.json();
+
+      // Step 2: Submit registration with document URLs
+      const payload = {
+        // Step 1: Personal Info & Credentials
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        username: formData.email,
+        gender: formData.gender,
+        identity_reference: formData.identity_reference,
+        identity_type_id: 1, // Assuming 1 is SA ID for student
+        nationality: formData.nationality,
+        interested_courses: formData.interested_courses,
+        role_id: 4,
+        user_type: 2,
+        // NOTE: Using a static password for demonstration/test environment safety
+        password: "kznMatric2026",
+        contact: {
+          phone: formData.phone,
+          tel_no: formData.tel_no,
+          email: formData.email,
+        },
+        address: {
+          address_line_1: formData.street,
+          city: formData.city,
+          province: formData.state,
+          postal_code: formData.zipCode,
+          country: formData.country,
+          address_type_id: 1
+        },
+
+        // 2. School
+        school: {
+          name: formData.schoolName,
+          centre_no: formData.schoolCentreNo,
+          school_phone: formData.schoolPhone,
+          subjects: [], // Assuming subjects is handled later or empty for now
+          school_city: formData.schoolCity
+        },
+
+        // 3 Parents/Guardian
+        parent: {
+          first_nameP: formData.firstNameP,
+          last_nameP: formData.lastNameP,
+          genderP: formData.genderP,
+          identity_referenceP: formData.identity_referenceP,
+          identity_type_idP: 1, // Assuming 1 is SA ID for parent
+          nationalityP: formData.nationalityP,
+          phoneP: formData.phoneP,
+          relationshipP: formData.relationship,
+          occupationP: formData.occupation,
+          address_lineP: formData.streetP,
+          cityP: formData.cityP,
+          provinceP: formData.stateP,
+          postal_codeP: formData.zipCodeP,
+          countryP: formData.countryP,
+          address_type_idP: 1
+        },
+
+        // 4. Document URLs
+        documents: {
+          id_document_url: uploadResult.idDocumentUrl,
+          matric_document_url: uploadResult.matricDocumentUrl
+        }
+      };
+
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -1208,26 +1262,51 @@ export default function Signup() {
                     </div>
 
                     {/* Document Upload Section */}
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-bold text-gray-900">Document Upload (Optional)</h3>
-                      <p className="text-gray-600 text-sm">Upload your supporting document (e.g., ID copy, proof of residence). Max 5MB, PDF/JPG/PNG only.</p>
+                    <div className="space-y-6">
+                      <h3 className="text-xl font-bold text-gray-900">Document Upload *</h3>
+                      <p className="text-gray-600 text-sm">Upload your ID copy and matric results/certificate. Max 5MB each, PDF/JPG/PNG only.</p>
 
-                      <label htmlFor="document-upload" className="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
-                        <Upload className="w-8 h-8 text-indigo-500 mb-2" />
-                        <p className="mb-2 text-sm text-gray-500">
-                          <span className="font-semibold">Click to upload</span> or drag and drop
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {formData.document ? formData.document.name : 'No file selected'}
-                        </p>
-                        <input
-                            id="document-upload"
-                            type="file"
-                            className="hidden"
-                            onChange={handleFileChange}
-                            accept=".pdf,.jpg,.jpeg,.png"
-                        />
-                      </label>
+                      {/* ID Document Upload */}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">ID Copy *</label>
+                        <label htmlFor="id-document-upload" className="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                          <Upload className="w-8 h-8 text-indigo-500 mb-2" />
+                          <p className="mb-2 text-sm text-gray-500">
+                            <span className="font-semibold">Click to upload ID copy</span> or drag and drop
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {formData.idDocument ? formData.idDocument.name : 'No file selected'}
+                          </p>
+                          <input
+                              id="id-document-upload"
+                              type="file"
+                              className="hidden"
+                              onChange={(e) => handleFileChange(e, 'idDocument')}
+                              accept=".pdf,.jpg,.jpeg,.png"
+                          />
+                        </label>
+                      </div>
+
+                      {/* Matric Document Upload */}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">Matric Results/Certificate *</label>
+                        <label htmlFor="matric-document-upload" className="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                          <Upload className="w-8 h-8 text-indigo-500 mb-2" />
+                          <p className="mb-2 text-sm text-gray-500">
+                            <span className="font-semibold">Click to upload matric certificate</span> or drag and drop
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {formData.matricDocument ? formData.matricDocument.name : 'No file selected'}
+                          </p>
+                          <input
+                              id="matric-document-upload"
+                              type="file"
+                              className="hidden"
+                              onChange={(e) => handleFileChange(e, 'matricDocument')}
+                              accept=".pdf,.jpg,.jpeg,.png"
+                          />
+                        </label>
+                      </div>
                     </div>
 
                     {/* Success Message */}

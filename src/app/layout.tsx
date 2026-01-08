@@ -20,10 +20,11 @@ export default function RootLayout({
 }>) {
 
    const pathname = usePathname();
-  
+
   // Define routes where you don't want header/footer
   const noLayoutRoutes = ['/admin/signin', '/admin/signup'];
-  const showLayout = !noLayoutRoutes.includes(pathname);
+  const isAdminRoute = pathname?.startsWith('/admin');
+  const showLayout = !noLayoutRoutes.includes(pathname) && !isAdminRoute;
 
   return (
       <html lang="en" suppressHydrationWarning>
