@@ -14,21 +14,24 @@ const slides = [
         subtitle: "Expert tutoring and personalized support for KwaZulu Natal matric learners",
         badge: "Get started today",
         image: "/images/banner/slide1.jpeg",
-        features: ["Expert Tutors", "Proven Methods", "Success Focused"]
+        features: ["Expert Tutors", "Proven Methods", "Success Focused"],
+        gradient: "from-blue-900/70 to-purple-900/70"
     },
     {
         title: "Excel in Your Matric Exams",
         subtitle: "Comprehensive support across all major matric subjects",
         badge: "12+ Subjects Available",
         image: "/images/banner/slide2.jpeg",
-        features: ["All Subjects", "Flexible Learning", "Personal Attention"]
+        features: ["All Subjects", "Flexible Learning", "Personal Attention"],
+        gradient: "from-purple-900/70 to-pink-900/70"
     },
     {
         title: "Unlock Your Full Potential",
         subtitle: "Bridge the gap between your current performance and your aspirations",
         badge: "Join Us Today",
         image: "/images/banner/slide3.jpeg",
-        features: ["Tailored Programs", "Expert Educators", "Proven Results"]
+        features: ["Tailored Programs", "Expert Educators", "Proven Results"],
+        gradient: "from-green-900/70 to-blue-900/70"
     }
 ];
 
