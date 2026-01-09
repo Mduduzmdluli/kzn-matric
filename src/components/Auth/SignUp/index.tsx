@@ -28,7 +28,7 @@ export default function Signup() {
     country: '',
 
     // Step 2: Courses & School
-    interested_courses: [],
+    interested_courses: [] as number[],
     schoolName: '',
     schoolCentreNo: '',
     schoolPhone: '',
@@ -677,7 +677,7 @@ export default function Signup() {
                                 validationErrors.identity_reference ? 'border-red-500' : 'border-gray-300'
                             }`}
                             placeholder="0001010000000"
-                            maxLength="13"
+                            maxLength={13}
                         />
                         {validationErrors.identity_reference && (
                             <p className="mt-1 text-sm text-red-600">{validationErrors.identity_reference}</p>
@@ -1019,7 +1019,7 @@ export default function Signup() {
                                 validationErrors.identity_referenceP ? 'border-red-500' : 'border-gray-300'
                             }`}
                             placeholder="0001010000000"
-                            maxLength="13"
+                            maxLength={13}
                         />
                         {validationErrors.identity_referenceP && (
                             <p className="mt-1 text-sm text-red-600">{validationErrors.identity_referenceP}</p>

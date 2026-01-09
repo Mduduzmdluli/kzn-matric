@@ -4,6 +4,27 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this';
 
+// Helper function to verify and extract user from token
+export function requireAuth(request: NextRequest) {
+  const token = request.cookies.get('admin-token')?.value;
+
+  if (!token) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as {
+      userId: number;
+      username: string;
+      roleId: number;
+      userType: string;
+    };
+    return decoded;
+  } catch (error) {
+    throw new Error('Unauthorized');
+  }
+}
+
 // Routes that require authentication
 const protectedRoutes = ['/admin'];
 const authRoutes = ['/auth/admin/login', '/auth/admin/register'];
