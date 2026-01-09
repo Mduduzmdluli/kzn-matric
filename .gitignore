@@ -12,6 +12,19 @@
 # next.js
 /.next/
 /out/
+/out-new/
+out-new.zip
+
+# Build artifacts that shouldn't be in root
+/*.html
+/*.txt
+/_next/
+/admin/
+/api/
+/images/
+/uploads/
+.nojekyll
+deploy.sh
 
 # production
 /build

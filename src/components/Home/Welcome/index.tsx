@@ -31,13 +31,15 @@ const Welcome = () => {
                   </div>
                 </div>
               ) : (
-                <iframe
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1"
-                  title="KwaZulu Natal Matric Excellence Introduction"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+                <video
+                  className="absolute inset-0 w-full h-full"
+                  controls
+                  autoPlay
+                  src="/images/VID-20250529-WA0012.mp4"
+                  style={{ objectFit: 'contain' }}
+                >
+                  Your browser does not support the video tag.
+                </video>
               )}
             </div>
 

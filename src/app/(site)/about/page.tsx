@@ -1,5 +1,5 @@
 'use client';
-import { Users, Target, Eye, BookOpen, TrendingUp, GraduationCap } from 'lucide-react';
+import { Users, Target, Eye, BookOpen, TrendingUp } from 'lucide-react';
 import Breadcrumb from '@/components/Common/Breadcrumb';
 import Image from 'next/image';
 import { getImagePrefix } from '@/utils/util';
@@ -42,18 +42,13 @@ export default function AboutPage() {
               {/* Image on Left */}
               <div className="relative">
                 <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
-                  {/* Replace with actual image */}
-                  <div className="w-full h-full bg-gradient-to-br from-primary/80 via-primary/60 to-primary/40 flex items-center justify-center">
-                    <GraduationCap className="text-white" size={120} strokeWidth={1.5} />
-                  </div>
-                  {/* Uncomment this when you have an actual image */}
-                  {/* <Image
-                    src={`${getImagePrefix()}/images/about/about-us.jpg`}
+                  <Image
+                    src="/images/banner/slide1.jpeg"
                     alt="KwaZulu Natal Matric Excellence"
                     fill
                     className="object-cover"
                     quality={100}
-                  /> */}
+                  />
                 </div>
                 {/* Decorative Elements */}
                 <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-primary/10 rounded-full blur-3xl"></div>

@@ -12,6 +12,7 @@
     "deploy": "touch out/.nojekyll && gh-pages -d out --dotfiles"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@iconify/icons-ion": "^1.2.10",
     "@iconify/react": "^5.0.1",
     "aos": "^2.3.4",
