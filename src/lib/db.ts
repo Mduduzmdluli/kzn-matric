@@ -20,8 +20,7 @@ function getPool(): Pool {
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
       connectTimeout: 10000, // 10 seconds
-      // Disable SSL if server doesn't support it
-      ssl: false,
+      // SSL is disabled by default when not specified (works for localhost and Afrihost)
     });
   }
   return poolInstance;

@@ -124,13 +124,13 @@ export async function POST(request: NextRequest) {
             </div>
 
             <div class="documents">
-              <h2>📎 Uploaded Documents</h2>
-              <p><strong>⚠️ Important:</strong> Please review the uploaded documents:</p>
+              <h2>📎 Required Documents</h2>
+              <p><strong>⚠️ Action Required:</strong> Request the following documents from the student:</p>
               <ul>
-                <li><strong>ID Document:</strong> <a href="https://online.matricexcellence.co.za${documents.idDocumentUrl}" target="_blank">View ID Document</a></li>
-                <li><strong>Matric Certificate:</strong> <a href="https://online.matricexcellence.co.za${documents.matricDocumentUrl}" target="_blank">View Matric Document</a></li>
+                <li><strong>ID Document:</strong> ${documents.idDocumentUrl === 'Not provided' ? '❌ Not selected during registration' : '✓ Student indicated they have this document'}</li>
+                <li><strong>Matric Certificate:</strong> ${documents.matricDocumentUrl === 'Not provided' ? '❌ Not selected during registration' : '✓ Student indicated they have this document'}</li>
               </ul>
-              <p><em>Click the links above to view and download the documents.</em></p>
+              <p><em>Please contact the student at ${student.email} or ${student.phone} to collect these documents.</em></p>
             </div>
 
             <div class="footer">
@@ -175,10 +175,12 @@ export async function POST(request: NextRequest) {
         Relationship: ${parent.relationship}
         Phone: ${parent.phone}
 
-        UPLOADED DOCUMENTS
+        REQUIRED DOCUMENTS
         ------------------
-        ID Document: https://online.matricexcellence.co.za${documents.idDocumentUrl}
-        Matric Certificate: https://online.matricexcellence.co.za${documents.matricDocumentUrl}
+        ID Document: ${documents.idDocumentUrl === 'Not provided' ? 'Not selected during registration' : 'Student indicated they have this document'}
+        Matric Certificate: ${documents.matricDocumentUrl === 'Not provided' ? 'Not selected during registration' : 'Student indicated they have this document'}
+
+        ACTION REQUIRED: Please contact the student at ${student.email} or ${student.phone} to collect these documents.
 
         Registration received at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
       `,

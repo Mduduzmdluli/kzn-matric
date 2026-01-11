@@ -433,42 +433,17 @@ export default function Signup() {
       return;
     }
 
-    // Validate documents
-    if (!formData.idDocument) {
-      setError('Please upload your ID copy.');
-      return;
-    }
-
-    if (!formData.matricDocument) {
-      setError('Please upload your matric results/certificate.');
-      return;
-    }
+    // Document validation (optional now - we'll just note them in email)
+    const documentsProvided = {
+      idDocument: formData.idDocument ? formData.idDocument.name : 'Not provided',
+      matricDocument: formData.matricDocument ? formData.matricDocument.name : 'Not provided'
+    };
 
     setLoading(true);
 
     try {
-      // Step 1: Upload documents first
-      const uploadFormData = new FormData();
-      uploadFormData.append('idDocument', formData.idDocument);
-      uploadFormData.append('matricDocument', formData.matricDocument);
-      uploadFormData.append('studentName', `${formData.firstName}_${formData.lastName}`);
-      uploadFormData.append('idNumber', formData.identity_reference);
-
-      const uploadResponse = await fetch('/api/upload/documents', {
-        method: 'POST',
-        body: uploadFormData,
-      });
-
-      if (!uploadResponse.ok) {
-        const uploadError = await uploadResponse.json();
-        setError(uploadError.error || 'Failed to upload documents.');
-        setLoading(false);
-        return;
-      }
-
-      const uploadResult = await uploadResponse.json();
-
-      // Step 2: Submit registration with document URLs
+      // Submit registration without uploading documents
+      // Documents will be mentioned in the admin email for manual follow-up
       const payload = {
         // Step 1: Personal Info & Credentials
         first_name: formData.firstName,
@@ -525,10 +500,10 @@ export default function Signup() {
           address_type_idP: 1
         },
 
-        // 4. Document URLs
+        // 4. Document info (file names only - not uploaded)
         documents: {
-          id_document_url: uploadResult.idDocumentUrl,
-          matric_document_url: uploadResult.matricDocumentUrl
+          id_document_url: documentsProvided.idDocument,
+          matric_document_url: documentsProvided.matricDocument
         }
       };
 
