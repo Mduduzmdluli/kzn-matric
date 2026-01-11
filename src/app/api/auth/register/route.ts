@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         const { name, centre_no, school_phone, subjects ,school_city } = school || {};
         const { address_line_1, city, postal_code, province, country, address_type_id } = address || {};
         const { first_nameP,last_nameP, genderP, identity_referenceP,identity_type_idP, nationalityP, phoneP, relationshipP, occupationP, address_lineP, cityP, provinceP, postal_codeP, countryP, address_type_idP} = parent || {};
-        const { id_document_url, matric_document_url } = documents || {};
+        const { idDocument, matricDocument } = documents || {};
 
         // --- Validation Checks ---
         if (!first_name || !last_name || !username || !email || !password || !identity_reference) {
@@ -105,8 +105,8 @@ export async function POST(request: NextRequest) {
             role_id || 4,
             identity_type_id || 1,
             identity_reference,
-            id_document_url || null,
-            matric_document_url || null,
+            idDocument ? idDocument.name : null, // Store filename only
+            matricDocument ? matricDocument.name : null, // Store filename only
         ];
 
         const [userResult]: any = await connection.query(userQuery, userValues);
@@ -298,8 +298,8 @@ export async function POST(request: NextRequest) {
                         relationship: relationshipP || 'Not specified',
                     },
                     documents: {
-                        idDocumentUrl: id_document_url || '/uploads/not-available',
-                        matricDocumentUrl: matric_document_url || '/uploads/not-available',
+                        idDocument: idDocument || null,
+                        matricDocument: matricDocument || null,
                     },
                 }),
             }).catch(err => console.error('Admin notification failed:', err))

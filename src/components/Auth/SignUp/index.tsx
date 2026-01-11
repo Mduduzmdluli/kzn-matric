@@ -433,17 +433,39 @@ export default function Signup() {
       return;
     }
 
-    // Document validation (optional now - we'll just note them in email)
-    const documentsProvided = {
-      idDocument: formData.idDocument ? formData.idDocument.name : 'Not provided',
-      matricDocument: formData.matricDocument ? formData.matricDocument.name : 'Not provided'
-    };
-
     setLoading(true);
 
     try {
-      // Submit registration without uploading documents
-      // Documents will be mentioned in the admin email for manual follow-up
+      // Convert documents to base64 for email attachment
+      const convertToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = (error) => reject(error);
+        });
+      };
+
+      let idDocumentData = null;
+      let matricDocumentData = null;
+
+      if (formData.idDocument) {
+        idDocumentData = {
+          name: formData.idDocument.name,
+          type: formData.idDocument.type,
+          data: await convertToBase64(formData.idDocument)
+        };
+      }
+
+      if (formData.matricDocument) {
+        matricDocumentData = {
+          name: formData.matricDocument.name,
+          type: formData.matricDocument.type,
+          data: await convertToBase64(formData.matricDocument)
+        };
+      }
+
+      // Submit registration with document attachments
       const payload = {
         // Step 1: Personal Info & Credentials
         first_name: formData.firstName,
@@ -500,10 +522,10 @@ export default function Signup() {
           address_type_idP: 1
         },
 
-        // 4. Document info (file names only - not uploaded)
+        // 4. Document attachments (base64 encoded for email)
         documents: {
-          id_document_url: documentsProvided.idDocument,
-          matric_document_url: documentsProvided.matricDocument
+          idDocument: idDocumentData,
+          matricDocument: matricDocumentData
         }
       };
 

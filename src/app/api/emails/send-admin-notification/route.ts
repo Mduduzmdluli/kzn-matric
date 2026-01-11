@@ -23,11 +23,34 @@ export async function POST(request: NextRequest) {
     // Email subject
     const subject = `Online - ${student.firstName} ${student.lastName} - ${student.idNumber}`;
 
+    // Prepare attachments
+    const attachments = [];
+    if (documents.idDocument) {
+      // Extract base64 data (remove data:mime/type;base64, prefix)
+      const base64Data = documents.idDocument.data.split(',')[1];
+      attachments.push({
+        filename: documents.idDocument.name,
+        content: base64Data,
+        encoding: 'base64',
+        contentType: documents.idDocument.type
+      });
+    }
+    if (documents.matricDocument) {
+      const base64Data = documents.matricDocument.data.split(',')[1];
+      attachments.push({
+        filename: documents.matricDocument.name,
+        content: base64Data,
+        encoding: 'base64',
+        contentType: documents.matricDocument.type
+      });
+    }
+
     // Email content
-    const mailOptions = {
+    const mailOptions: any = {
       from: `"KZN Matric Excellence Registration" <${process.env.SMTP_USER}>`,
       to: 'admin@matricexcellence.co.za',
       subject: subject,
+      attachments: attachments,
       html: `
         <!DOCTYPE html>
         <html>
@@ -124,13 +147,13 @@ export async function POST(request: NextRequest) {
             </div>
 
             <div class="documents">
-              <h2>📎 Required Documents</h2>
-              <p><strong>⚠️ Action Required:</strong> Request the following documents from the student:</p>
+              <h2>📎 Document Attachments</h2>
+              <p><strong>📧 Attached to this email:</strong></p>
               <ul>
-                <li><strong>ID Document:</strong> ${documents.idDocumentUrl === 'Not provided' ? '❌ Not selected during registration' : '✓ Student indicated they have this document'}</li>
-                <li><strong>Matric Certificate:</strong> ${documents.matricDocumentUrl === 'Not provided' ? '❌ Not selected during registration' : '✓ Student indicated they have this document'}</li>
+                <li><strong>ID Document:</strong> ${documents.idDocument ? `✓ ${documents.idDocument.name} (attached)` : '❌ Not provided'}</li>
+                <li><strong>Matric Certificate:</strong> ${documents.matricDocument ? `✓ ${documents.matricDocument.name} (attached)` : '❌ Not provided'}</li>
               </ul>
-              <p><em>Please contact the student at ${student.email} or ${student.phone} to collect these documents.</em></p>
+              ${!documents.idDocument || !documents.matricDocument ? `<p><em>⚠️ Contact student at ${student.email} or ${student.phone} for missing documents.</em></p>` : '<p><em>✅ All documents attached - please review below.</em></p>'}
             </div>
 
             <div class="footer">
@@ -175,12 +198,12 @@ export async function POST(request: NextRequest) {
         Relationship: ${parent.relationship}
         Phone: ${parent.phone}
 
-        REQUIRED DOCUMENTS
-        ------------------
-        ID Document: ${documents.idDocumentUrl === 'Not provided' ? 'Not selected during registration' : 'Student indicated they have this document'}
-        Matric Certificate: ${documents.matricDocumentUrl === 'Not provided' ? 'Not selected during registration' : 'Student indicated they have this document'}
+        DOCUMENT ATTACHMENTS
+        --------------------
+        ID Document: ${documents.idDocument ? `✓ ${documents.idDocument.name} (attached)` : '❌ Not provided'}
+        Matric Certificate: ${documents.matricDocument ? `✓ ${documents.matricDocument.name} (attached)` : '❌ Not provided'}
 
-        ACTION REQUIRED: Please contact the student at ${student.email} or ${student.phone} to collect these documents.
+        ${!documents.idDocument || !documents.matricDocument ? `ACTION REQUIRED: Contact student at ${student.email} or ${student.phone} for missing documents.` : '✓ All documents attached to this email.'}
 
         Registration received at: ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })}
       `,
