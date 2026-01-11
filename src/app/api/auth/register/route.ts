@@ -86,13 +86,20 @@ export async function POST(request: NextRequest) {
 
         // 1. Insert user into the 'users' table
         const userQuery = `
-            INSERT INTO users ( first_name, last_name, username, password, interested_courses, nationality, user_type, role_id, identity_type_id, identity_reference, id_document_url, matric_document_url, is_active, status_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1)
+            INSERT INTO users (
+                first_name, last_name, username, password, gender, nationality,
+                user_type, role_id, identity_type_id, identity_reference,
+                id_document_url, matric_document_url, is_active
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
         `;
 
         const userValues = [
-            first_name, last_name, username, hashedPassword,
-            JSON.stringify(interested_courses),
+            first_name,
+            last_name,
+            username,
+            hashedPassword,
+            data.gender || 'Male', // Add gender field
             nationality || null,
             user_type || 2,
             role_id || 4,
@@ -105,10 +112,10 @@ export async function POST(request: NextRequest) {
         const [userResult]: any = await connection.query(userQuery, userValues);
         const user_id = userResult.insertId;
 
-        // 2. Insert address into the 'address' table
+        // 2. Insert address into the 'addresses' table
         if (address_line_1 || city || province || postal_code || country) {
             const addressQuery = `
-                INSERT INTO address (
+                INSERT INTO addresses (
                     user_id, address_line_1, city, province, postal_code, address_type_id, country
                 ) VALUES (?, ?, ?, ?, ?, ?, ?)
             `;
@@ -119,26 +126,23 @@ export async function POST(request: NextRequest) {
                 city || null,
                 province || null,
                 postal_code || null,
-                address_type_id,
+                address_type_id || 1,
                 country || null,
             ];
 
             await connection.query(addressQuery, addressValues);
         }
 
-        // 3. Insert contact info into the 'contact' table
+        // 3. Insert contact info into the 'contacts' table
         if (phone || email) {
             const contactQuery = `
-                INSERT INTO contact (
-                    user_id, name, mail_address, cell_no, tel_no
-                ) VALUES (?, ?, ?, ?, ?)
+                INSERT INTO contacts (
+                    user_id, email, phone, tel_no
+                ) VALUES (?, ?, ?, ?)
             `;
-
-            const contactName = `${first_name} ${last_name}`;
 
             const contactValues = [
                 user_id,
-                contactName,
                 email,
                 phone || null,
                 tel_no || null
@@ -147,16 +151,16 @@ export async function POST(request: NextRequest) {
             await connection.query(contactQuery, contactValues);
         }
 
-        // 2. Insert parent details into the 'parent table' table
-        if (first_nameP || last_nameP || identity_referenceP || phoneP || address_lineP) {
+        // 4. Insert parent details into the 'parents' table
+        if (first_nameP || last_nameP || identity_referenceP || phoneP) {
             const parentQuery = `
                 INSERT INTO parents (
-                    user_id, first_name, last_name, gender ,phone, relationship, occupation, nationality, identity_type_id, identity_reference, address_type_id, address_line_1, city, province, postal_code, country
-                   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    first_name, last_name, gender, phone, relationship,
+                    occupation, nationality, identity_type_id, identity_reference
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
             const parentValues = [
-                user_id,
                 first_nameP,
                 last_nameP,
                 genderP,
@@ -166,39 +170,145 @@ export async function POST(request: NextRequest) {
                 nationalityP || null,
                 identity_type_idP || 1,
                 identity_referenceP,
-                address_type_idP || 1,
-                address_lineP || null,
-                cityP || null,
-                provinceP || null,
-                postal_codeP || null,
-                countryP || null,
             ];
 
-            await connection.query(parentQuery, parentValues);
+            const [parentResult]: any = await connection.query(parentQuery, parentValues);
+            const parent_id = parentResult.insertId;
+
+            // 4a. Link student to parent in student_parents table
+            const studentParentQuery = `
+                INSERT INTO student_parents (student_id, parent_id, is_primary)
+                VALUES (?, ?, 1)
+            `;
+            await connection.query(studentParentQuery, [user_id, parent_id]);
+
+            // 4b. Insert parent address into parent_addresses table
+            if (address_lineP || cityP || provinceP || postal_codeP || countryP) {
+                const parentAddressQuery = `
+                    INSERT INTO parent_addresses (
+                        parent_id, address_line_1, city, province, postal_code, country, address_type_id
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                `;
+
+                const parentAddressValues = [
+                    parent_id,
+                    address_lineP || null,
+                    cityP || null,
+                    provinceP || null,
+                    postal_codeP || null,
+                    countryP || null,
+                    address_type_idP || 1,
+                ];
+
+                await connection.query(parentAddressQuery, parentAddressValues);
+            }
         }
 
-        // 3. Insert school info into the 'school' table
-        //name, centre_no, school_phone, subjects ,school_city
+        // 5. Insert school info into the 'schools' table
         if (name || school_phone || centre_no) {
             const schoolQuery = `
-                INSERT INTO school (
-                    user_id, name, centre_no, phone ,city
-                ) VALUES (?, ?, ?, ?, ?)
+                INSERT INTO schools (
+                    name, centre_no, school_phone, school_city
+                ) VALUES (?, ?, ?, ?)
             `;
 
             const schoolValues = [
-                user_id,
                 name,
                 centre_no,
                 school_phone || null,
                 school_city || null
             ];
 
-            await connection.query(schoolQuery, schoolValues);
+            const [schoolResult]: any = await connection.query(schoolQuery, schoolValues);
+            const school_id = schoolResult.insertId;
+
+            // 5a. Link student to school in student_schools table
+            const studentSchoolQuery = `
+                INSERT INTO student_schools (user_id, school_id)
+                VALUES (?, ?)
+            `;
+            await connection.query(studentSchoolQuery, [user_id, school_id]);
+        }
+
+        // 6. Insert interested courses into student_courses table
+        if (interested_courses && Array.isArray(interested_courses) && interested_courses.length > 0) {
+            const courseQuery = `
+                INSERT INTO student_courses (student_id, course_id, status)
+                VALUES (?, ?, 'Active')
+            `;
+
+            for (const courseId of interested_courses) {
+                await connection.query(courseQuery, [user_id, courseId]);
+            }
         }
 
         // --- Transaction Commit ---
         await connection.commit();
+
+        // 7. Send email notifications (non-blocking - don't wait for email to complete)
+        const emailPromises = [];
+
+        // Send welcome email to student
+        emailPromises.push(
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'}/emails/send-welcome`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: email,
+                    studentName: `${first_name} ${last_name}`,
+                }),
+            }).catch(err => console.error('Welcome email failed:', err))
+        );
+
+        // Get course names for admin email
+        const courseNames: string[] = [];
+        if (interested_courses && Array.isArray(interested_courses)) {
+            const [coursesData] = await pool.query<any[]>(
+                'SELECT name FROM courses WHERE id IN (?)',
+                [interested_courses]
+            );
+            courseNames.push(...coursesData.map((c: any) => c.name));
+        }
+
+        // Send notification to admin
+        emailPromises.push(
+            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'}/emails/send-admin-notification`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    student: {
+                        firstName: first_name,
+                        lastName: last_name,
+                        email: email,
+                        idNumber: identity_reference,
+                        phone: phone || 'Not provided',
+                        gender: data.gender || 'Not specified',
+                        nationality: nationality || 'Not specified',
+                    },
+                    school: {
+                        name: name || 'Not provided',
+                        centreNo: centre_no || 'Not provided',
+                        city: school_city || 'Not provided',
+                    },
+                    courses: courseNames.length > 0 ? courseNames : ['No courses selected'],
+                    parent: {
+                        firstName: first_nameP || 'Not provided',
+                        lastName: last_nameP || 'Not provided',
+                        phone: phoneP || 'Not provided',
+                        relationship: relationshipP || 'Not specified',
+                    },
+                    documents: {
+                        idDocumentUrl: id_document_url || '/uploads/not-available',
+                        matricDocumentUrl: matric_document_url || '/uploads/not-available',
+                    },
+                }),
+            }).catch(err => console.error('Admin notification failed:', err))
+        );
+
+        // Send emails in background (don't wait)
+        Promise.all(emailPromises)
+            .then(() => console.log('✅ Registration emails sent successfully'))
+            .catch(err => console.error('❌ Some emails failed to send:', err));
 
         // --- Success Response ---
         return NextResponse.json(

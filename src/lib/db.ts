@@ -6,6 +6,8 @@ let poolInstance: Pool | null = null;
 
 function getPool(): Pool {
   if (!poolInstance) {
+    const isLocalhost = process.env.DB_HOST === 'localhost' || process.env.DB_HOST === '127.0.0.1';
+
     poolInstance = mysql.createPool({
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT || '3306'),
@@ -17,8 +19,9 @@ function getPool(): Pool {
       queueLimit: 0,
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
-      // Disable SSL for local development, enable for production
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: true } : undefined,
+      connectTimeout: 10000, // 10 seconds
+      // Disable SSL if server doesn't support it
+      ssl: false,
     });
   }
   return poolInstance;

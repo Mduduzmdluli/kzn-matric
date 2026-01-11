@@ -1,6 +1,58 @@
-# Database Migrations
+# Database Setup Guide for KZN Matric Excellence
 
-This directory contains database migration scripts for the KZN Matric Excellence platform.
+This directory contains database schema and migration scripts for the KZN Matric Excellence platform.
+
+## Quick Start - Recreate Lost Database
+
+If you've lost your database, follow these steps to recreate it from your registration form:
+
+### Step 1: Start MySQL Server
+
+**Option A: Using Command Line (as Administrator)**
+```bash
+net start mysql80
+```
+
+**Option B: Using Services**
+1. Press `Win + R`, type `services.msc`
+2. Find "MySQL80" service
+3. Right-click → Start
+
+### Step 2: Run the Complete Schema
+
+```bash
+mysql -u root -p < database/schema/complete_database_schema.sql
+```
+
+Or using MySQL Workbench:
+1. Open MySQL Workbench
+2. Connect to your server (localhost, user: root)
+3. File → Open SQL Script
+4. Select `database/schema/complete_database_schema.sql`
+5. Execute (⚡ icon or Ctrl+Shift+Enter)
+
+### Step 3: Verify Setup
+
+```bash
+mysql -u root -p
+```
+
+Then:
+```sql
+USE `kzn-matric`;
+SHOW TABLES;
+-- Should show 14 tables
+```
+
+## What's Included in the Schema
+
+The complete schema creates:
+- ✅ All 14 tables needed for registration
+- ✅ 13 pre-configured courses (Math, Science, English, etc.)
+- ✅ User roles (Admin, Student, Teacher)
+- ✅ All foreign key relationships
+- ✅ Indexes for performance
+- ✅ A student profile view
 
 ## Running Migrations
 
