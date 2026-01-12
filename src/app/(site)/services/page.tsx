@@ -234,6 +234,134 @@ export default function ServicesPage() {
             </div>
           </div>
 
+          {/* School Fees Section */}
+          <div className="mt-16 bg-white dark:bg-dark-2 rounded-2xl shadow-xl border border-stroke dark:border-stroke-dark overflow-hidden">
+            <div className="bg-gradient-to-r from-primary to-primary/80 p-6 md:p-8">
+              <h2 className="text-3xl font-bold text-white mb-2">
+                School Fees & Payment Information
+              </h2>
+              <p className="text-white/90">
+                Transparent pricing with flexible payment options
+              </p>
+            </div>
+
+            <div className="p-6 md:p-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Fees Breakdown */}
+                <div>
+                  <h3 className="text-2xl font-bold text-dark dark:text-white mb-6">
+                    Entry Requirements & Fees
+                  </h3>
+
+                  <div className="bg-primary/5 dark:bg-primary/10 rounded-lg p-6 mb-6 border border-primary/20">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-lg font-semibold text-dark dark:text-white">Grand Total</span>
+                      <span className="text-2xl font-bold text-primary">R9,000</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="bg-gray-50 dark:bg-dark rounded-lg p-4 border border-stroke dark:border-stroke-dark">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium text-dark dark:text-white">Registration Fee</span>
+                        <span className="font-bold text-primary">R3,000</span>
+                      </div>
+                      <p className="text-sm text-body-secondary mt-1">Payable upon registration</p>
+                    </div>
+
+                    <div className="space-y-2 mt-4">
+                      <h4 className="font-semibold text-dark dark:text-white mb-3">Monthly Installments (R1,000 each):</h4>
+
+                      {[
+                        { month: '1st Installment', date: '28th February' },
+                        { month: '2nd Installment', date: '30th March' },
+                        { month: '3rd Installment', date: '30th April' },
+                        { month: '4th Installment', date: '31st May' },
+                        { month: '5th Installment', date: '30th June' },
+                        { month: '6th Installment', date: '31st July' },
+                      ].map((installment, index) => (
+                        <div key={index} className="flex justify-between items-center py-2 px-4 bg-white dark:bg-dark-2 rounded border border-stroke dark:border-stroke-dark">
+                          <div>
+                            <span className="text-dark dark:text-white font-medium">{installment.month}</span>
+                            <span className="text-sm text-body-secondary ml-2">({installment.date})</span>
+                          </div>
+                          <span className="font-semibold text-dark dark:text-white">R1,000</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Banking Details */}
+                <div>
+                  <h3 className="text-2xl font-bold text-dark dark:text-white mb-6">
+                    Banking Details
+                  </h3>
+
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-dark dark:to-dark-2 rounded-lg p-6 border-2 border-primary/30 mb-6">
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm text-body-secondary mb-1">Account Name</p>
+                        <p className="text-lg font-bold text-dark dark:text-white">KWAZULU NATAL MATRIC EXCELLENCE</p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-body-secondary mb-1">Bank</p>
+                          <p className="font-semibold text-dark dark:text-white">STANDARD BANK</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-body-secondary mb-1">Account Type</p>
+                          <p className="font-semibold text-dark dark:text-white">CHEQUE</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-white dark:bg-dark rounded-lg p-4 border border-primary/20">
+                        <p className="text-sm text-body-secondary mb-1">Account Number</p>
+                        <p className="text-2xl font-bold text-primary tracking-wider">10251031053</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-6">
+                    <h4 className="font-semibold text-dark dark:text-white mb-2 flex items-center gap-2">
+                      <span className="text-amber-600">⚠️</span>
+                      Payment Methods
+                    </h4>
+                    <ul className="space-y-2 text-sm text-body-secondary">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="text-primary flex-shrink-0 mt-0.5" size={16} />
+                        <span>Direct cash payment at counter during registration</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="text-primary flex-shrink-0 mt-0.5" size={16} />
+                        <span>Bank deposit to the account above</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-gray-50 dark:bg-dark rounded-lg p-6 border border-stroke dark:border-stroke-dark">
+                    <h4 className="font-semibold text-dark dark:text-white mb-3">Contact Details</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="text-body-secondary">Phone:</span>
+                        <a href="tel:0726953911" className="text-primary hover:underline font-medium">072 695 3911</a>
+                        <span className="text-body-secondary">/</span>
+                        <a href="tel:0843259834" className="text-primary hover:underline font-medium">084 325 9834</a>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-body-secondary">Email:</span>
+                        <a href="mailto:Kznmatricexcellence07@gmail.com" className="text-primary hover:underline font-medium">
+                          Kznmatricexcellence07@gmail.com
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Contact CTA */}
           <div className="mt-16 text-center">
             <h3 className="text-2xl font-bold text-dark dark:text-white mb-4">
