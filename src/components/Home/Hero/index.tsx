@@ -3,10 +3,6 @@ import Image from 'next/image';
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getImagePrefix } from '@/utils/util';
 import Slider from "react-slick";
-// @ts-ignore
-import "slick-carousel/slick/slick.css";
-// @ts-ignore
-import "slick-carousel/slick/slick-theme.css";
 
 const slides = [
     {

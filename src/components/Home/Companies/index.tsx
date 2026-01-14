@@ -2,8 +2,6 @@
 import Image from "next/image";
 import React, { Component } from "react";
 import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { TruestedCompanies } from "@/app/api/data";
 import { getImagePrefix } from "@/utils/util";
 

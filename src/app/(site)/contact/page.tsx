@@ -3,7 +3,6 @@ import { Mail, Phone, MapPin, Send, Clock, MessageCircle } from 'lucide-react';
 import Breadcrumb from '@/components/Common/Breadcrumb';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import emailjs from '@emailjs/browser';
 
 const contactInfo = [
   {
@@ -52,28 +51,24 @@ export default function ContactPage() {
     setLoading(true);
 
     try {
-      // EmailJS configuration
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
+      // Send email via API route
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || '',
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
 
-      // Prepare template parameters
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        phone: formData.phone || 'Not provided',
-        subject: formData.subject,
-        message: formData.message,
-        to_email: 'support@knmatricexcellence.co.za',
-      };
-
-      // Send email using EmailJS
-      await emailjs.send(
-        serviceId,
-        templateId,
-        templateParams,
-        publicKey
-      );
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
 
       toast.success('Message sent successfully! We will get back to you soon.');
       setFormData({
@@ -83,10 +78,10 @@ export default function ContactPage() {
         subject: '',
         message: '',
       });
-      setLoading(false);
     } catch (error) {
       console.error('Email sending error:', error);
       toast.error('Failed to send message. Please try again or email us directly at support@knmatricexcellence.co.za');
+    } finally {
       setLoading(false);
     }
   };
