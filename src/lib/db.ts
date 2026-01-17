@@ -8,7 +8,7 @@ function getPool(): Pool {
   // Always recreate the pool to ensure we get fresh environment variables
   // This is necessary because Passenger sets env vars at runtime, not build time
   const dbConfig = {
-    host: process.env.DB_HOST || 'kznmatricexcellence.ct2caysi4ymj.eu-north-1.rds.amazonaws.com',
+    host: process.env.DB_HOST || 'kznmatricexcellence.c7kqo2m4kslb.eu-west-2.rds.amazonaws.com',
     port: parseInt(process.env.DB_PORT || '3306'),
     user: process.env.DB_USER || 'adminmatricexcellence',
     password: process.env.DB_PASSWORD || 'IJOPHLNyCZt2+R!w',
