@@ -4,6 +4,9 @@ import pool from '@/lib/db';
 import { RowDataPacket } from 'mysql2';
 import { PoolConnection } from 'mysql2/promise';
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function POST(request: NextRequest) {
     let connection: PoolConnection | null = null;
 
