@@ -252,8 +252,9 @@ export async function POST(request: NextRequest) {
         const emailPromises = [];
 
         // Send welcome email to student
+        const apiUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
         emailPromises.push(
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'}/emails/send-welcome`, {
+            fetch(`${apiUrl}/api/emails/send-welcome`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -275,7 +276,7 @@ export async function POST(request: NextRequest) {
 
         // Send notification to admin
         emailPromises.push(
-            fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'}/emails/send-admin-notification`, {
+            fetch(`${apiUrl}/api/emails/send-admin-notification`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
