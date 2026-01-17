@@ -1,0 +1,43 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/matricu2f0z0/public_html"
+PassengerBaseURI "/"
+PassengerNodejs "/home/matricu2f0z0/nodevenv/public_html/22/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+SetEnv DB_HOST localhost
+SetEnv DB_USER matricu2f0z0_admin
+SetEnv DB_PASSWORD IJOPHLNyCZt2+R!w
+SetEnv DB_NAME matricu2f0z0_kzn-matric
+SetEnv DB_PORT 3306
+SetEnv JWT_SECRET 1884ad10ec928568b4120f7c98653a853db1210d3232ae1ad2c26764e7d9b168074820597b52be5c50ad4139b8934ccdb73e5307d3f419d4908ae247cec69a05
+SetEnv NEXTAUTH_URL https://www.matricexcellence.co.za
+SetEnv NEXT_PUBLIC_API_URL https://www.matricexcellence.co.za/api
+SetEnv NEXTAUTH_SECRET 8f3e9a7b2c1d4e6f5a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f
+SetEnv NODE_ENV production
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END
+
+# Force HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    RequestHeader set X-Forwarded-Proto "https" env=HTTPS
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Follow symbolic links
+Options +FollowSymLinks

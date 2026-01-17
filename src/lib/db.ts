@@ -5,24 +5,27 @@ import type { Pool } from 'mysql2/promise';
 let poolInstance: Pool | null = null;
 
 function getPool(): Pool {
-  if (!poolInstance) {
-    const isLocalhost = process.env.DB_HOST === 'localhost' || process.env.DB_HOST === '127.0.0.1';
+  // Always recreate the pool to ensure we get fresh environment variables
+  // This is necessary because Passenger sets env vars at runtime, not build time
+  const dbConfig = {
+    host: process.env.DB_HOST || 'kznmatricexcellence.ct2caysi4ymj.eu-north-1.rds.amazonaws.com',
+    port: parseInt(process.env.DB_PORT || '3306'),
+    user: process.env.DB_USER || 'adminmatricexcellence',
+    password: process.env.DB_PASSWORD || 'IJOPHLNyCZt2+R!w',
+    database: process.env.DB_NAME || 'kznmatricexcellence',
+    waitForConnections: true,
+    connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || '10'), // Can scale up on AWS
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0,
+    connectTimeout: 10000, // 10 seconds
+  };
 
-    poolInstance = mysql.createPool({
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '3306'),
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || 'root@12345',
-      database: process.env.DB_NAME || 'kzn-matric',
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-      enableKeepAlive: true,
-      keepAliveInitialDelay: 0,
-      connectTimeout: 10000, // 10 seconds
-      // SSL is disabled by default when not specified (works for localhost and Afrihost)
-    });
+  // Only create pool once, but always at runtime (not during build)
+  if (!poolInstance) {
+    poolInstance = mysql.createPool(dbConfig);
   }
+
   return poolInstance;
 }
 

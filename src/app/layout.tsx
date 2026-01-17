@@ -1,7 +1,8 @@
 'use client';
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import "./slick.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import { ThemeProvider } from "next-themes";

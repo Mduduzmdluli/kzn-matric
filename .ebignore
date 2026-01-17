@@ -1,0 +1,10 @@
+# Don't upload these to AWS
+node_modules/
+.next/
+.git/
+.env
+.env.local
+.env.development
+out/
+*.log
+.DS_Store

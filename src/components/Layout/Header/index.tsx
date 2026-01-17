@@ -102,12 +102,12 @@ const Header: React.FC = () => {
             )}
             <button
               onClick={() => setNavbarOpen(!navbarOpen)}
-              className="block lg:hidden p-2 rounded-lg"
+              className="block lg:hidden p-3 rounded-lg border-2 border-gray-800 dark:border-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               aria-label="Toggle mobile menu"
             >
-              <span className="block w-6 h-0.5 bg-white"></span>
-              <span className="block w-6 h-0.5 bg-white mt-1.5"></span>
-              <span className="block w-6 h-0.5 bg-white mt-1.5"></span>
+              <span className="block w-6 h-1 bg-gray-800 dark:bg-white"></span>
+              <span className="block w-6 h-1 bg-gray-800 dark:bg-white mt-1"></span>
+              <span className="block w-6 h-1 bg-gray-800 dark:bg-white mt-1"></span>
             </button>
           </div>
         </div>

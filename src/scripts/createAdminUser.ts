@@ -11,11 +11,11 @@ const createAdminUser = async () => {
   try {
     // Create database connection
     connection = await mysql.createConnection({
-      host: process.env.DB_HOST || 'localhost',
+      host: process.env.DB_HOST || 'matricexcellence.co.za',
       port: parseInt(process.env.DB_PORT || '3306'),
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'your_database',
+      user: process.env.DB_USER || 'matricu2f0z0_admin',
+      password: process.env.DB_PASSWORD || 'IJOPHLNyCZt2+R!w',
+      database: process.env.DB_NAME || 'matricu2f0z0_kzn-matric',
     });
 
     console.log('✅ Connected to MySQL Database');
@@ -33,7 +33,7 @@ const createAdminUser = async () => {
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash('Admin@123', 10);
+    const hashedPassword = await bcrypt.hash('Admin@2680', 10);
 
     // Insert admin user
     const [result] = await connection.execute(
