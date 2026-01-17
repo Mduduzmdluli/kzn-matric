@@ -10,7 +10,7 @@ function getPool(): Pool {
   const dbConfig = {
     host: process.env.DB_HOST || 'kznmatricexcellence.c7kqo2m4kslb.eu-west-2.rds.amazonaws.com',
     port: parseInt(process.env.DB_PORT || '3306'),
-    user: process.env.DB_USER || 'adminmatricexcellence',
+    user: process.env.DB_USER || 'adminmatric',
     password: process.env.DB_PASSWORD || 'IJOPHLNyCZt2+R!w',
     database: process.env.DB_NAME || 'kznmatricexcellence',
     waitForConnections: true,
