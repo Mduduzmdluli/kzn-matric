@@ -28,11 +28,11 @@ export async function POST(request: NextRequest) {
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
             .button { display: inline-block; padding: 12px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
             .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-            .highlight { background: #fff; padding: 15px; border-left: 4px solid #667eea; margin: 20px 0; }
+            .highlight { background: #fff; padding: 15px; border-left: 4px solid #f97316; margin: 20px 0; }
           </style>
         </head>
         <body>
@@ -64,15 +64,13 @@ export async function POST(request: NextRequest) {
 
               <p>We're excited to help you achieve your matric excellence goals!</p>
 
-              <a href="https://online.matricexcellence.co.za/signin" class="button">Login to Your Account</a>
-
               <p>Best regards,<br>
               <strong>The KZN Matric Excellence Team</strong></p>
             </div>
             <div class="footer">
-              <p>📧 Email: support@knmatricexcellence.co.za<br>
-              📱 Phone: +27 123 456 789<br>
-              🌐 Website: <a href="https://online.matricexcellence.co.za">online.matricexcellence.co.za</a></p>
+              <p>📧 Email: info@matricexcellence.co.za<br>
+              📱 Phone: +27 31 373 6391<br>
+              🌐 Website: <a href="https://www.matricexcellence.co.za">www.matricexcellence.co.za</a></p>
               <p style="font-size: 12px; color: #999;">
                 This is an automated message. Please do not reply to this email.
               </p>
@@ -99,14 +97,12 @@ export async function POST(request: NextRequest) {
 
         We're excited to help you achieve your matric excellence goals!
 
-        Login: https://online.matricexcellence.co.za/signin
-
         Best regards,
         The KZN Matric Excellence Team
 
-        Email: support@knmatricexcellence.co.za
-        Phone: +27 123 456 789
-        Website: online.matricexcellence.co.za
+        Email: info@matricexcellence.co.za
+        Phone: +27 31 373 6391
+        Website: www.matricexcellence.co.za
       `,
     };
 
