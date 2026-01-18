@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
             </div>
             <div class="footer">
               <p>📧 Email: info@matricexcellence.co.za<br>
-              📱 Phone: +27 31 373 6391<br>
+              📱 Phone: +27 84 325 9834<br>
               🌐 Website: <a href="https://www.matricexcellence.co.za">www.matricexcellence.co.za</a></p>
               <p style="font-size: 12px; color: #999;">
                 This is an automated message. Please do not reply to this email.
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
         The KZN Matric Excellence Team
 
         Email: info@matricexcellence.co.za
-        Phone: +27 31 373 6391
+        Phone: +27 84 325 9834
         Website: www.matricexcellence.co.za
       `,
     };

@@ -84,7 +84,7 @@ const footer = () => {
                 icon="tabler:phone"
                 className="text-primary text-3xl inline-block me-2"
               />
-              <h5 className="text-lg text-black/60">+27 31 373 6391</h5>
+              <h5 className="text-lg text-black/60">+27 84 325 9834</h5>
             </div>
             <div className="flex gap-2 mt-10">
               <Icon
