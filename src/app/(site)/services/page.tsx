@@ -351,8 +351,8 @@ export default function ServicesPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-body-secondary">Email:</span>
-                        <a href="mailto:Kznmatricexcellence07@gmail.com" className="text-primary hover:underline font-medium">
-                          Kznmatricexcellence07@gmail.com
+                        <a href="mailto:admin@matricexcellence.co.za" className="text-primary hover:underline font-medium">
+                          admin@matricexcellence.co.za
                         </a>
                       </div>
                     </div>
