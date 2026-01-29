@@ -8,14 +8,14 @@ const contactInfo = [
   {
     icon: Phone,
     title: 'Phone',
-    details: ['+27 123 456 789', '+27 987 654 321'],
+    details: ['+27 84 325 9834', '+27 81 352 2611'],
     color: 'bg-blue-50 dark:bg-blue-900/20',
     iconColor: 'text-blue-600 dark:text-blue-400',
   },
   {
     icon: Mail,
     title: 'Email',
-    details: ['info@knmatricexcellence.co.za', 'support@knmatricexcellence.co.za'],
+    details: ['info@matricexcellence.co.za', 'support@matricexcellence.co.za'],
     color: 'bg-green-50 dark:bg-green-900/20',
     iconColor: 'text-green-600 dark:text-green-400',
   },
