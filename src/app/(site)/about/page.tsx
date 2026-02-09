@@ -63,7 +63,7 @@ export default function AboutPage() {
                 <div className="space-y-4 text-body-secondary text-lg leading-relaxed text-justify">
                   <p>
                     KwaZulu Natal Matric Excellence is a dynamic and purpose-driven educational company
-                    established in <strong className="text-dark dark:text-white">2007</strong> by Bheka Beekay Mchunu. It is now under new management led by two visionary women:
+                    established in <strong className="text-dark dark:text-white">2007</strong> by <strong className="text-dark dark:text-white">Bheka Beekay Mchunu</strong>. It is now under new management led by two visionary women:
                     <strong className="text-dark dark:text-white"> Buhle Langa</strong> and
                     <strong className="text-dark dark:text-white"> Londiwe Buthelezi</strong>.
                   </p>
