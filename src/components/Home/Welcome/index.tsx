@@ -94,7 +94,7 @@ const Welcome = () => {
             {/* Stats or Highlights */}
             <div className="mt-10 grid grid-cols-3 gap-6">
               <div className="text-center">
-                <h3 className="text-3xl font-bold text-primary mb-1">2024</h3>
+                <h3 className="text-3xl font-bold text-primary mb-1">2007</h3>
                 <p className="text-sm text-body-secondary">Founded</p>
               </div>
               <div className="text-center">
