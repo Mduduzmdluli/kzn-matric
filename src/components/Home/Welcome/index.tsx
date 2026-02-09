@@ -55,12 +55,12 @@ const Welcome = () => {
             </h2>
 
             <div className="space-y-4 text-body-secondary leading-relaxed">
-              <p className="text-lg">
-                KwaZulu Natal Matric Excellence is a dynamic and purpose-driven educational company
-                founded in <strong className="text-dark dark:text-white">2024</strong> by two visionary women:
-                <strong className="text-dark dark:text-white"> Buhle Langa</strong> and
-                <strong className="text-dark dark:text-white"> Londiwe Buthelezi</strong>.
-              </p>
+               <p>
+                    KwaZulu Natal Matric Excellence is a dynamic and purpose-driven educational company
+                    established in <strong className="text-dark dark:text-white">2007</strong> by <strong className="text-dark dark:text-white">Bheka Beekay Mchunu</strong>. It is now under new management led by two visionary women:
+                    <strong className="text-dark dark:text-white"> Buhle Langa</strong> and
+                    <strong className="text-dark dark:text-white"> Londiwe Buthelezi</strong>.
+                  </p>
 
               <p>
                 The company was born out of a shared passion for education and a deep understanding
